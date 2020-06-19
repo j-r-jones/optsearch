@@ -19,7 +19,7 @@ include make.inc
 
 .PHONY: all
 all: optsearch
-	#strip build/optsearch
+	strip build/optsearch
 	@echo Done
 
 .PHONY: optsearch
