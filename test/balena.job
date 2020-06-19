@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#SBATCH --account=free
+#SBATCH --job-name=debugging
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=1
+# 6 hours is the max walltime allowed for the 'free' account, though this is not actually enough for HPL
+#SBATCH --time=00:02:00
+#SBATCH --workdir=/home/d/jrj24/scratch/optsearch/test
+
+## Set up the environment
+. /etc/profile.d/modules.sh
+module purge
+
+module add slurm
+module add gcc/7.1.0
+module add use.own
+module add openmpi/gcc-7.1.0
+
+cd $SLURM_SUBMIT_DIR
+
+cd ..; make clean test
+

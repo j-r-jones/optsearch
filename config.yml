@@ -1,0 +1,47 @@
+---
+## Main config file for optsearch
+quit-signal: SIGUSR1
+clean-script: ./test/clean-script.sh
+build-script: ./test/build-script.sh
+accuracy-test: ./test/success-script.sh
+timeout: 15
+performance-test: ./test/perf-script.sh
+epsilon: 2.0
+benchmark-timeout: 120
+benchmark-repeats: 20
+compiler:
+    name: gcc
+    version: 7.1.0 # Not used at present, but included to help the user
+    flags:
+        - name: expensive-optimizations
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: forward-propagate
+          depends-on: [ unroll-loops ]
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: inline-functions
+          depended-on-by: [ indirect-inlining ]
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: stack-reuse
+          type: list
+          prefix: '-f'
+          separator: '='
+          values: [ all, named_vars, none ]
+        - name: fp-contract
+          type: list
+          #- values: [ on, off, fast ] # on is currently not implemented, so really you have [off, off, fast] 
+          prefix: '-f'
+          separator: '='
+          values: [ off, fast ]
+        - name: tree-parallelize-loops 
+          type: range
+          # This is the number of threads to split the loops across
+          prefix: '-f'
+          separator: '='
+          max: 256 # Could be higher.  This is a guess based on likeliest high core count.
+          min: 0

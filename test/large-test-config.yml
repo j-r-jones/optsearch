@@ -1,0 +1,628 @@
+---
+quit-signal: SIGUSR1
+clean-script: ./clean-script.sh
+build-script: ./build-script.sh
+accuracy-test: ./success-script.sh
+performance-test: ./perf-script.sh
+epsilon: 10.0
+compiler:
+    name: gfortran
+    version: 4.9.2
+    flags:
+        - name: aggressive-loop-optimizations
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-functions
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-jumps
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-labels
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: asynchronous-unwind-tables
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: auto-inc-dec
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: branch-count-reg
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: branch-probabilities
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: branch-target-load-optimize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: branch-target-load-optimize2
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: combine-stack-adjustments
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: cse-follow-jumps
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: dce
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: dse
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: early-inlining
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: expensive-optimizations
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: function-cse
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: gcse
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: gcse-after-reload
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: gcse-las
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: gcse-lm
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: gcse-sm
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: graphite
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: graphite-identity
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: inline
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: inline-atomics
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-cp
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-cp-alignment
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-cp-clone
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-icf
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-icf-functions
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-profile
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-pta
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-pure-const
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-ra
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-reference
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ipa-sra
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ira-hoist-pressure
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ira-loop-pressure
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ira-share-save-slots
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ira-share-spill-slots
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: ivopts
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: jump-tables
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: loop-nest-optimize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: loop-parallelize-all
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: lra-remat
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: move-loop-invariants
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: optimize-sibling-calls
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: optimize-strlen
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: partial-inlining
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: peel-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: peephole
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: peephole2
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: plt
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: predictive-commoning
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: prefetch-loop-arrays
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: reorder-blocks
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: reorder-blocks-and-partition
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: reorder-functions
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: sel-sched-pipelining
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: sel-sched-pipelining-outer-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: sel-sched-reschedule-pipelined
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: selective-scheduling
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: split-ivs-in-unroller
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-dominator-opts
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-forwprop
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-fre
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-distribute-patterns
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-distribution
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-if-convert
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-if-convert-stores
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-im
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-ivcanon
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-optimize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-loop-vectorize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-lrs
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-partial-pre
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-phiprop
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-pre
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-pta
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-reassoc
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-scev-cprop
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-sink
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-slp-vectorize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-slsr
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-sra
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-switch-conversion
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-tail-merge
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-ter
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-vectorize
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: tree-vrp
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: unconstrained-commons
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: unroll-all-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: unroll-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: unswitch-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: unwind-tables
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: variable-expansion-in-unroller
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: vect-cost-model
+          type: list
+          prefix: '-f'
+          separator: '='
+          values: [ ]
+        - name: stack-reuse
+          type: list
+          prefix: '-f'
+          separator: '='
+          values: [ all, named_vars, none ]
+        - name: fp-contract
+          type: list
+          prefix: '-f'
+          separator: '='
+          values: [ off, fast ]
+        - max: 50
+          min: 0
+          name: predictable-branch-outcome
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: partial-inlining-entry-probability
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1000
+          min: 0
+          name: hot-bb-count-ws-permille
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 10000
+          min: 1
+          name: unlikely-bb-count-fraction
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: builtin-expect-probability
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: tracer-dynamic-coverage
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: tracer-min-branch-ratio
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: tracer-min-branch-probability-feedback
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: tracer-min-branch-probability
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 64
+          min: -1
+          name: vect-max-peeling-for-alignment
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 10
+          min: 1
+          name: max-sched-insn-conflict-delay
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 4
+          min: 2
+          name: max-combine-insns
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: lra-inheritance-ebb-probability-cutoff
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: indir-call-topn-profile
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: ipa-cp-recursion-penalty
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: ipa-cp-single-call-penalty
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 2147483647
+          min: 0
+          name: lto-max-partition
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: store-merging-allow-unaligned
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 2
+          min: 1
+          name: sched-pressure-algorithm
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 999999
+          min: 1
+          name: max-slsr-cand-scan
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-stack
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-instrument-allocas
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-globals
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-instrument-writes
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-instrument-reads
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-memintrin
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: asan-use-after-return
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 2147483647
+          min: 0
+          name: asan-instrumentation-with-call-threshold
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 10
+          min: 1
+          name: fsm-scale-path-stmts
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 10
+          min: 1
+          name: fsm-scale-path-blocks
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 10
+          min: 1
+          name: max-ssa-name-query-depth
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: hsa-gen-debug-stores
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 1
+          min: 0
+          name: vect-epilogues-nomask
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 100
+          min: 0
+          name: unroll-jam-min-percent
+          prefix: '--param '
+          separator: '='
+          type: range
+        - max: 512
+          min: 0
+          name: avoid-fma-max-bits
+          prefix: '--param '
+          separator: '='
+          type: range

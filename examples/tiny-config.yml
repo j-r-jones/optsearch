@@ -1,0 +1,68 @@
+---
+## Main config file for optsearch
+# These are simple scripts intended to make configuration slightly easier.
+quit-signal: SIGUSR1 # see signal(7) manpage for the list of signals. By default slurm will send SIGTERM 30 seconds before SIGKILL
+clean-script: ./clean-blas.sh
+build-script: ./build-blas.sh # equiv to make; must use environment variable FLAGS to be set and to then affect the compilation via CFLAGS or FFLAGS, etc depending on which language is being compiled.
+accuracy-test: ./test-blas.sh # Run some tests to check that numerical results are not adversely affected by compiler optimisations.  This should return an integer. 0 is success.
+performance-test: ./run-hpl.sh # Run a benchmark.  Return a measurement, such as run time, that can be used to assess fitness against other tests.  Lower is better, but 0 is probably a failure or error.
+epsilon: 10.0 # Value of expected experimental error.  This helps in determining the stopping criteria, and whether a benchmark has converged before and after the maximum number of repeats has been made.
+timeout: 120 # How long to let the build, clean and test scripts run for
+benchmark-timeout: 3600 # How long to let the benchmark run for before killing it
+benchmark-repeats: 20 # Maximum number of times to repeat the benchmark
+# Compiler specific settings:
+compiler:
+    name: gcc
+    version: 4.9.2
+    flags:
+        - name: aggressive-loop-optimizations
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-loops
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: align-jumps
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: expensive-optimizations
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: forward-propagate
+          depends-on: [ unroll-loops ]
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: inline-functions
+          depended-on-by: [ indirect-inlining ]
+          type: on-off
+          on-prefix: '-f'
+          off-prefix: '-fno-'
+        - name: stack-reuse
+          type: list
+          prefix: '-f'
+          separator: '='
+          values: [ all, named_vars, none ]
+        - name: fp-contract
+          type: list
+          #- values: [ on, off, fast ] # on is currently not implemented, so really you have [off, off, fast] 
+          prefix: '-f'
+          separator: '='
+          values: [ off, fast ]
+        - name: tree-parallelize-loops 
+          type: range
+          # This is the number of threads to split the loops across
+          prefix: '-f'
+          separator: '='
+          max: 256 # Could be higher.  This is a guess based on likeliest high core count.
+          min: 0
+        - name: loop-block-tile-size
+          type: range
+          prefix: "--param "
+          separator: "="
+          min: 0
+          max: 500
+          #default: 80

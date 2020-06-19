@@ -1,0 +1,76 @@
+* Written in C
+
+* Attempting to follow the GNU coding standards (though not their code
+  layout):
+    https://www.gnu.org/prep/standards/standards.html
+
+I'll begin using Nick's suggested strategy of using third-party libraries
+where possible to speed up development, then replacing them if/when
+necessary after I have something that works or discover that they don't
+quite do what I wanted.
+
+Third-party software/libraries:
+
+* Obvious things like getopt, etc
+* libyaml for config files (http://pyyaml.org/wiki/LibYAML)
+* task-farm with work-stealing and deques (a few options, mainly from the
+  DOE, exist for this, such as http://hpc.pnl.gov/tascel/ )
+    ** Change of plan -- this is a PGAS library, which is not going to work
+       for us, so I must implement my own.
+	** Possible useful example for inspiration:
+		- https://www.inf.ed.ac.uk/teaching/courses/ppls/farm.c
+		- Others on the web
+* MPI (probably OpenMPI)
+* SQLite for storing results and for initialising from in subsequent runs.
+
+I need to write:
+
+* Main driver/oracle/task master
+* Particle swarm optimiser (with expectation of later replacing with
+  parallel, asynchronous version)
+* Objective function to test the above
+
+Considerations/Gotchas:
+
+* Need to run through flags at the start to check that they're valid.
+* Need to run through parameters & their values at the start to check that
+  they're valid.
+* Need to note and avoid combinations of flags or parameter values that are
+  invalid or cause the compiler to instantly crash.
+* GCC (and others) like to fail with odd errors, fail to terminate, etc in
+  runs.  Memory usage can become very high.  This needs to be detected.
+* Jitter -- runs will have to be repeated at least 3 times to make sure
+  that we get a realistic answer for our timings.
+* CPU frequency scaling in both hardware and software.  Software is worse,
+  hardware is less easy to detect.  Combining hardware counters with cycle
+  counters and clock might be best?
+* Checkpoint/resume.
+* Checking for user stupidity.. different compiler version when running
+  from checkpoint, different OS, hardware, heterogeneous nodes, etc,
+  changed config (could keep a checksum), etc.
+* Avoid clashing by using local file system (ideally /dev/shm) for
+  compilation, etc on nodes.  No need for parallel or shared file system
+  except for access to source.  Config sent by oracle/task master.
+* Notice and record slow nodes.  Possibly avoid scheduling work on them.
+  Report to the user.
+
+Nice-to-haves:
+
+* Run on a single machine or as many machines as can be obtained.
+* Allow reconfigurable jobs.
+* Speculative execution for work-stealing; help slow nodes.
+* Allow master to be on hardware that doesn't match the slaves IFF it is
+  not doing any compiling or anything itself.
+
+Want:
+
+* Unit testing (eg use CUnit)
+* Logging
+* Autoconf/automake
+* Separate build, src, lib, test directories
+
+Target software:
+
+* Reference BLAS
+* CloverLeaf
+* Other miniapps?  Eg TeaLeaf
