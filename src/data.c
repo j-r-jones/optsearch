@@ -266,7 +266,6 @@ int opt_db_create_schema(int num_dims, spso_dimension_t ** dims)
 		"CREATE TABLE global_best_history (timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, positionID INTEGER NOT NULL, FOREIGN KEY (positionID) REFERENCES position(id));",
 		/* Singletons */
 		"CREATE TABLE singleton (what TEXT NOT NULL, value INTEGER);",
-		"INSERT INTO singleton VALUES('PRNG_ITER', NULL);",
 		"INSERT INTO singleton VALUES('PRNG_SEED', NULL);",
 		"INSERT INTO singleton VALUES('CONVERGED', 0);",
 		"INSERT INTO singleton VALUES('BEST_POS', NULL);",
@@ -1582,50 +1581,6 @@ int opt_db_retrieve_singleton(const char *name, int *value)
 	}
 	log_debug("data.c: Got %d for %s in singleton table", *value, name);
 
-	free(stmt);
-	return rc;
-}
-
-int opt_db_get_prng_iter(unsigned long long *iter)
-{
-	int rc;
-	char *errmsg = NULL;
-	char *stmt = "SELECT value FROM singleton where (what=\"PRNG_ITER\");";
-
-	log_debug("data.c: Executing query: %s", stmt);
-
-	rc = sqlite3_exec(opt_db, stmt, opt_db_get_ulonglong_callback, iter,
-			  &errmsg);
-	if (rc != SQLITE_OK) {
-		log_error
-		    ("SQL error encountered trying to retrieve singleton PRNG_ITER: %s\n", errmsg);
-		sqlite3_free(errmsg);
-	}
-	log_debug("data.c: Got %llu for PRNG_ITER in singleton table", *iter);
-
-	return rc;
-}
-
-int opt_db_store_prng_iter(unsigned long long iter)
-{
-	int rc;
-	char *errmsg = NULL;
-	char *stmt_fmt = "UPDATE singleton SET value='%llu' where (what=\"PRNG_ITER\");";
-	char *stmt = NULL;
-	int size;
-
-	size = strlen(stmt_fmt) + CHAR_ULONGLONG_MAX + 1;
-	stmt = calloc(size, sizeof(char));
-	sprintf(stmt, stmt_fmt, iter);
-
-	log_debug("data.c: Executing query: %s", stmt);
-
-	rc = sqlite3_exec(opt_db, stmt, NULL, NULL, &errmsg);
-	if (rc != SQLITE_OK) {
-		log_error
-		    ("SQL error encountered trying to store singleton PRNG_ITER: %s\n", errmsg);
-		sqlite3_free(errmsg);
-	}
 	free(stmt);
 	return rc;
 }

@@ -72,10 +72,6 @@ spso_dimension_t **opt_db_get_searchspace(int *search_space_size);
 
 spso_swarm_t *opt_db_get_swarm(int num_dims, spso_dimension_t ** dims);
 
-int opt_db_store_prng_iter(unsigned long long iter);
-
-int opt_db_get_prng_iter(unsigned long long *iter);
-
 int opt_db_store_converged(int flag);
 
 int opt_db_get_converged(int *flag);

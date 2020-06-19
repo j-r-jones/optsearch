@@ -228,14 +228,13 @@ void spso_init(int num_of_dimensions, spso_dimension_t ** dimensions,
  * @param num_of_dimensions the number of search dimensions
  * @param swarm the spso swarm to use
  * @param objective_function the function used to measure fitness of each
- * @param prng_iteration used to return to the same point in the sequence
  * @param epsilon the experimental error
  * @param not_moved_for the counter keeping track of how long since we last updated the global best
  */
 void
 spso_init_from_previous(int num_of_dimensions, spso_dimension_t ** dimensions,
 			spso_swarm_t * swarm, spso_obj_fun_t objective_function,
-			unsigned long long prng_iteration, double epsilon, int (*stop) (void),
+			double epsilon, int (*stop) (void),
 			spso_position_t * current_best_position,
 			spso_fitness_t current_best_fitness,
 			spso_fitness_t previous_best_fitness,

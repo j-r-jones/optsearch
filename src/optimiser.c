@@ -164,7 +164,6 @@ int opt_checkpoint(void)
 	spso_fitness_t prev_prev_fitness = 0.0;
 	spso_position_t *pos = NULL;
 	int no_moves_count = 0;
-	unsigned long long prng_iter = 0;
 	char *flags = NULL;
 
 	no_moves_count = spso_get_no_movement_counter();
@@ -186,10 +185,6 @@ int opt_checkpoint(void)
 	opt_db_store_prev_best(prev_fitness);
 	opt_db_store_curr_best(pos, fitness);
 	opt_db_store_no_move_counter(no_moves_count);
-
-	prng_iter = opt_rand_get_iteration();
-	log_trace("Storing PRNG_ITER %llu", prng_iter);
-	opt_db_store_prng_iter(prng_iter);
 
 	/*
 	 * This causes SQLite to segfault internally.  The call shouldn't be
@@ -372,7 +367,6 @@ void opt_init(opt_config_t * conf)
 	int no_move_count = 0;
 	spso_swarm_t *swarm;
 	spso_dimension_t *dim = NULL;
-	unsigned long long  prng_iter;
 	int signum = 9;
     struct sigaction act;
 	spso_position_t *curr_best_position = NULL;
@@ -470,7 +464,6 @@ void opt_init(opt_config_t * conf)
 			/* Retrieve data from the database and use to initialise spso and the
 			 * prng */
 			swarm = opt_db_get_swarm(search_space_size, search_space);
-			opt_db_get_prng_iter(&prng_iter);
 			opt_db_get_prev_prev_best(&prev_prev_best_fitness);
 			opt_db_get_prev_best(&prev_best_fitness);
 			curr_best_position =
@@ -480,7 +473,7 @@ void opt_init(opt_config_t * conf)
 			opt_db_get_no_move_counter(&no_move_count);
 
 			spso_init_from_previous(search_space_size, search_space, swarm,
-						&opt_add_to_fitness_queue, prng_iter,
+						&opt_add_to_fitness_queue,
 						opt_config->epsilon, &opt_task_stop,
 						curr_best_position, curr_best_fitness,
 						prev_best_fitness,

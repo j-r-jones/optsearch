@@ -147,7 +147,7 @@ spso_position_t *spso_get_global_best_history(spso_fitness_t * best,
 void
 spso_init_from_previous(int num_of_dimensions, spso_dimension_t ** dimensions,
 			spso_swarm_t * swarm, spso_obj_fun_t objective_function,
-			unsigned long long prng_iteration, double eps, int (*stop) (void),
+			double eps, int (*stop) (void),
 			spso_position_t * current_best_position,
 			spso_fitness_t current_best_fitness,
 			spso_fitness_t previous_best_fitness,
@@ -160,16 +160,6 @@ spso_init_from_previous(int num_of_dimensions, spso_dimension_t ** dimensions,
 	/* Initialise PRNG */
 	opt_rand_seed_t *seed = opt_rand_gen_seed();
 	*(seed->seed) = 1294404794;	/* This is an arbitrary choice, originally used by Clerc, but as we are using a different PRNG we won't be reproducing any of his results (his search space was quite different too, as well as being Reals).  I use the same number because I needed to pick one to ensure reproducibility. It can be changed later or made random. */
-	/* XXX TODO FIXME This always breaks when the iteration gets big.  SQLite3
-	 * cannot handle the huge values, but OptSearch can.
-	 * This is not going to be trivial to fix, and since our search is
-	 * asynchronous we probably lose any advantage of doing this anyway.  Our
-	 * results aren't really exactly reproducible already.
-	 *
-	log_trace("Initialising PRNG with iteration %llu, prng_iteration");
-	opt_rand_init_naive(seed, prng_iteration);
-	log_trace("Finished initialising PRNG");
-	*/
 	opt_rand_init_seed(seed);
 
 	spso_stop_flag = false;
