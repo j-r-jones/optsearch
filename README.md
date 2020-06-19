@@ -56,10 +56,11 @@ of software to compile programs more optimally for a specific machine, and a
 stop-gap solution so be provided via tuning of reference library
 implementations.
 
-Such tools are not entirely new.  There is a little prior art.  ATLAS contains
+Such tools are not entirely new.  There is a little prior art.
+[ATLAS](https://github.com/math-atlas/math-atlas) contains
 a fairly simple one, which searches a very small set of compiler flags.
 During the writing of this project, several other similar projects have
-appeared.  OpenTuner now, after discussions with its author, also includes a
+appeared.  [OpenTuner](https://github.com/jansel/opentuner) currently also includes a
 simple example for tuning GCC parameters and flags.  Other projects go into
 their own domains in more detail, often targeting specific hardware such
 as GPUs.
@@ -77,9 +78,10 @@ rely on it.
 
 ## Current dependencies:
 * [libyaml](https://github.com/yaml/libyaml)
-* MPI (OpenMPI will be the most, possibly only, implementation tested)
-* GNU Scientific Library
-* SQLite (included in the source tree; used for checkpointing)
+* [MPI](https://www.mpi-forum.org/) ([MVAPICH](http://mvapich.cse.ohio-state.edu/) preferred; OpenMPI currently does
+  not work correctly for OptSearch, but will be fine if used for the target program)
+* [GNU Scientific Library](https://www.gnu.org/software/gsl/)
+* [SQLite](https://sqlite.org/index.html) (included in the source tree; used for checkpointing)
 
 ## Building
 You will need GNU Make to build it, and of course a compiler.  GCC is what has
@@ -111,7 +113,7 @@ slowly being documented in the related thesis.
 Expect many bugs.
 
 ## Known bugs
-* It is impossible to check if we have enough memory to read in a given config,
+* It is difficult to check if we have enough memory to read in a given config,
   so you could run out.
 * If you include a YAML file inside itself or otherwise have circular
   includes, these cannot currently be detected and you will have a program
