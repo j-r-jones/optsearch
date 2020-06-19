@@ -72,9 +72,9 @@ that it was neither very portable, nor particularly efficient.  Not ideal in
 something intended to run on emerging architectures.
 
 Python, and particularly the various libraries required by a large framework
-like OpenTuner, often takes a while to get ported, so you cannot provide better
-performing libraries so rapidly after you buy bleeding edge hardware if you
-rely on it.
+like OpenTuner, often takes a while to get ported.  As a result, you cannot
+provide better performing libraries soon after buying bleeding edge
+hardware.
 
 ## Current dependencies:
 * [libyaml](https://github.com/yaml/libyaml)
@@ -106,20 +106,19 @@ unsure.
 * Testing of performance via hardware counters (eg using perf)
 
 ## Health warning
-As this is a work in progress, it does not do very much yet.  Most of what it
-should do is already documented in comments within the code, and everything is
-slowly being documented in the related thesis.
 
-Expect many bugs.
+This was written late at night under the influence of strong coffee by someone
+suffering from severe sleep deprivation.  Expect many bugs.  No guarantees are
+made or responsibility taken for your use of this software.
 
 ## Known bugs
 * It is difficult to check if we have enough memory to read in a given config,
-  so you could run out.
+  so you could run out.  This is to be fixed.
 * If you include a YAML file inside itself or otherwise have circular
   includes, these cannot currently be detected and you will have a program
   that uses up all memory and fails to terminate. Hopefully it will end up
   being OOM-killed before anything else breaks, but this is not guaranteed and
-  is not something over which I have any control.
+  is not something over which I have any control at present.
   This will be detected (and handled appropriately) in a later version, but
   time pressures mean it has to be tolerated for now.  It is up to you to
   avoid doing anything stupid.
