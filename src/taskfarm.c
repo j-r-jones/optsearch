@@ -638,7 +638,7 @@ int benchmark(const char * format, char * flags, double * time)
 
 		for (i=0; i < config->benchmark_repeats; i++) {
 			/*
-			 * TODO This one MUST be repeated either config->benchmark_repeat
+			 * This one MUST be repeated either config->benchmark_repeat
 			 * times, OR if 4 runs have a standard deviation <= config->epsilon,
 			 * then we should report the mean time, not the time of just one run.
 			 */
