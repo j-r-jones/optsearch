@@ -21,8 +21,9 @@ thesis for details of those and why they were necessary.
 
 For more information, please refer to the related PhD thesis:
 
-	"Autotuning Compiler Options for HPC"
-	DOI: 10.13140/RG.2.2.35053.33761
+["Autotuning Compiler Options for HPC"](https://researchportal.bath.ac.uk/en/studentTheses/auto-tuning-compiler-options-for-hpc)
+
+Or search for the DOI: 10.13140/RG.2.2.35053.33761
 
 ## Assumptions
 As over 95% of the world's publicly known supercomputers run the Linux
