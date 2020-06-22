@@ -1,6 +1,6 @@
 # OptSearch
 
-Search for the optimal set of compiler flags for a given program and compiler.
+Search for the (an) optimal set of compiler flags for a given program and compiler.
 Config files are supplied in YAML format, and should contain a number of
 useful settings.  These include the parameters and flags used to control
 optimisations of the compiler, which compiler is being used, and how to run
