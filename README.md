@@ -1,6 +1,6 @@
 # OptSearch
 
-Search for the (an) optimal set of compiler flags for a given program and compiler.
+Search for an optimal set of compiler flags for a given program and compiler.
 Config files are supplied in YAML format, and should contain a number of
 useful settings.  These include the parameters and flags used to control
 optimisations of the compiler, which compiler is being used, and how to run
@@ -15,9 +15,9 @@ The tests are assumed to be run as scripts, such as bash scripts, and are
 naively run and timed using the available utilities from `time.h` and
 `system()` calls.
 
-The search itself is done by a particle swarm optimiser, based on SPSO 2011
-but with some alterations for this particular type of search problem.  See the
-thesis for details of those and why they were necessary.
+The search itself is done by a particle swarm optimiser, based on [SPSO 2011
+as described by Clerc](http://clerc.maurice.free.fr/pso/SPSO_descriptions.pdf),
+but with some alterations for this particular type of search problem.
 
 For more information, please refer to the related PhD thesis:
 
