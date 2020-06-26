@@ -66,11 +66,11 @@ simple example for tuning GCC parameters and flags.  Other projects go into
 their own domains in more detail, often targeting specific hardware such
 as GPUs.
 
-OptSearch is a total rewrite of what was previously a proof of concept written
-rather hurriedly and messily in Python, later rewritten to use the facilities
-provided by OpenTuner.  There were many problems with that approach, not least
-that it was neither very portable, nor particularly efficient.  Not ideal in
-something intended to run on emerging architectures.
+OptSearch is a total rewrite of what was previously a proof of concept (PoC).  First
+written rather hurriedly and messily in Python, and later rewritten to use the facilities
+provided by OpenTuner, it became clear that a different approach was needed.  There
+were many problems with those PoCs, not least that they waere neither very portable, nor
+particularly efficient.  Not ideal in something intended to run on emerging architectures.
 
 Python, and particularly the various libraries required by a large framework
 like OpenTuner, often takes a while to get ported.  As a result, you cannot
