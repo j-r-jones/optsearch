@@ -17,4 +17,4 @@
 
 # Simple examples:
 # C99 is required for uint32_t support
-CFLAGS = -W -Wall -O2 -g -pedantic
+export CFLAGS = -W -Wall -O2 -g -pedantic
