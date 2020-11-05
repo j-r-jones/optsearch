@@ -128,6 +128,9 @@ int report_fitness(const int x, double y, int visits)
 
 	log_debug("Received uid %d and fitness (time) %lf.", x, y);
 
+	/* TODO make use of the visit counter so we can pretend that some points
+	 * have been visited before. */
+
 	if (x == 12)
 		opt_queue_push(34, test_flags5);
 	else if (x == 13)
@@ -195,15 +198,14 @@ int test_data(int rank)
 	spso_dimension_t **dbdim = NULL;
 	spso_position_t *pos = NULL;
 	spso_position_t *dbpos = NULL;
-	spso_velocity_t *vel = NULL;
-	spso_velocity_t *dbvel = NULL;
+	spso_velocity_t *vel = NULL; /* TODO This variable isn't used */
+	spso_velocity_t *dbvel = NULL; /* TODO This variable isn't used */
 	spso_particle_t *part = NULL;
 	spso_particle_t *dbpart = NULL;
 	spso_swarm_t *swarm;
-	int iter = 12344566;
-	int dbseed, seed = 4686536;
+	unsigned int dbseed, seed = 4686536;
 	int flag = 1;
-	int dbiter = 0, dbflag = 0;
+	int dbflag = 0;
 	double prevprev, prev, curr;
 	spso_position_t *currpos, *dbcurrpos;
 	double dbprevprev, dbprev, dbcurr;
@@ -297,12 +299,9 @@ int test_data(int rank)
 		assert(part->previous_best_fitness == swarm->particles[0]->previous_best_fitness);
 	}
 
-	assert(opt_db_store_prng_iter(iter) == 0);
 	assert(opt_db_store_prng_seed(seed) == 0);
 	assert(opt_db_store_converged(flag) == 0);
 
-	assert(opt_db_get_prng_iter(&dbiter) == 0);
-	assert(iter == dbiter);
 	assert(opt_db_get_prng_seed(&dbseed) == 0);
 	assert(seed == dbseed);
 	assert(opt_db_get_converged(&dbflag) == 0);
@@ -368,6 +367,8 @@ int test_spso(int rank)
 	spso_swarm_t *swarm;
 	spso_particle_t *particle;
 	char *flags = NULL;
+	int visits = 0;
+	int known_positions = 0;
 
 	log_debug("Starting SPSO test");
 
@@ -401,7 +402,7 @@ int test_spso(int rank)
 			log_debug("test_spso(): Particle uid is %d",
 				  particle->uid);
 			fitness = gen_fitness(num_dims, &particle->position);
-			spso_update_particle(j, fitness, false);
+			spso_update_particle(j, fitness, visits, known_positions);
 			/* Then we would now add the particle to the queue, rather than
 			 * spso doing it, since someone needs to translate from position
 			 * to a string representing the compiler flags for the taskfarm.
@@ -409,6 +410,7 @@ int test_spso(int rank)
 			if (spso_is_stopping())
 				break;
 		}
+		known_positions++;
 	}
 	if (!spso_is_stopping()) {
 		log_debug("SPSO did not converge within %d iterations", limit);
@@ -452,11 +454,10 @@ int test_prng(int rank)
 	 * way and run forward to the iteration we'd got to)
 	 */
 	int i;
-	int num, next;
+	int num;
 	int repeats = 1024;
 	int min = -2;
 	int max = INT_MAX-2;
-	int iter;
 	uint32_t *inner_seed;
 	int seed_size;
 	opt_rand_seed_t *seed = NULL;
@@ -486,10 +487,6 @@ int test_prng(int rank)
 		assert(num >= min);
 	}
 
-	iter = opt_rand_get_iteration();
-	log_trace("Iter is %u, i is %d", iter, i);
-	assert(i == iter);
-
 	log_trace("Calling free on seed");
 	opt_rand_free(seed);
 
@@ -499,14 +496,6 @@ int test_prng(int rank)
 	seed->seed = inner_seed;
 	seed->size = seed_size;
 	opt_rand_print_seed(stderr, seed);
-
-	log_trace
-	    ("Re-initialising with new seed (old seed values), one position behind the previous last one");
-	opt_rand_init_naive(seed, (iter - 1));	/* - 1 to step back once */
-	next = opt_rand_int_range(min, max);
-	/* More exhaustive testing would be nice here */
-	log_trace("num is: %d, next is %d", num, next);
-	// assert(num == next); // TODO THIS FAILS
 
 	log_trace("Calling free on seed (clone)");
 	opt_rand_free(seed);
