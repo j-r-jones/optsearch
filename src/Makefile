@@ -27,9 +27,11 @@ endif
 
 INCLUDE += -I./ -I../lib/sqlite -I../lib/wellrng
 # Note that these are GCC specific
-CFLAGS += -fno-builtin -ftrapv -fstack-check -fstack-protector-all  $(INCLUDE)
+CFLAGS += -fno-builtin -ftrapv -fstack-check -fstack-protector-all $(INCLUDE)
 LDFLAGS += -L./
-LDLIBS += ../lib/wellrng/WELL512a.o ../lib/sqlite/sqlite3.o -lyaml -lgsl -lgslcblas -lreadline -lncurses -lpthread -ldl -lm
+# The readline and ncurses libraries are for features of SQLite that we are not using in OptSearch, but were using during debugging
+#LDLIBS += ../lib/wellrng/WELL512a.o ../lib/sqlite/sqlite3.o -lyaml -lgsl -lgslcblas -lreadline -lncurses -lpthread -ldl -lm
+LDLIBS += ../lib/wellrng/WELL512a.o ../lib/sqlite/sqlite3.o -lyaml -lgsl -lgslcblas -lpthread -ldl -lm
 
 .SUFFIXES: .c .h .o .so
 
