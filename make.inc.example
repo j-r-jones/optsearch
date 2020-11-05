@@ -17,4 +17,7 @@
 
 # Simple examples:
 # C99 is required for uint32_t support
+export CC = mpicc
 export CFLAGS = -W -Wall -O2 -g -pedantic
+export INCLUDE = -I${HOME}/include
+export LDFLAGS = -L${HOME}/lib
