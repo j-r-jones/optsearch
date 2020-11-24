@@ -1,9 +1,15 @@
 
+
 Step 1: Generate the compiler flag part of the input file for OptSearch using the helper Python 2.7 script.
 
-To do this, you will need params.def from the relevant GCC version that you are using.  This can be downloaded from one of the GCC mirror sites.
+To do this, you will need params.def from the relevant GCC version that you are using.  This can be downloaded from one of the GCC mirror sites.  Because I am tuning the reference BLAS in this example, it is gfortran that is of interest (the reference BLAS is written in Fortran).
 
- $ python2.7 ./optsearch/scripts/gcc_to_config.py -c gfortran -t ./optsearch/examples/helloworld.f -s ./gcc-8.1.0/gcc/params.def -o gcc-8.1.0-config.yaml
+  $ gfortran --version
+  GNU Fortran (GCC) 8.1.0 20180502 (Cray Inc.)
+  Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  $ python2.7 ./optsearch/scripts/gcc_to_config.py -c gfortran -t ./optsearch/test/helloworld.f -s ./gcc-8.1.0/gcc/params.def -o gcc-8.1.0-config.yaml
   2020-11-24 16:32:40,773 removing flag -fhandle-exceptions because renamed
   2020-11-24 16:33:16,734 removing flag -fno-stack-protector-all because it results in compile error
   2020-11-24 16:33:16,735 Odd... -fstack-protector-all works but -fno-stack-protector-all does not
@@ -22,7 +28,7 @@ To do this, you will need params.def from the relevant GCC version that you are 
   2020-11-24 16:34:46,310 removing flag --param min-nondebug-insn-uid=536870911 because it results in compile error
   2020-11-24 16:35:28,158 removing flag --param=sched-autopref-queue-depth=-1 because it results in compile error
   2020-11-24 16:35:33,894 removing flag --param=vect-max-peeling-for-alignment=-1 because it results in compile error
- $
+  $
 
 Step 2. Add the other required sections of the config file.  You can use the basic examples for this.  The missing parts need to go at the top of the one that was just generated.  For example:
 
@@ -48,6 +54,6 @@ Step 4. Run OptSearch using the system's job scheduler.  OptSearch uses MPI and 
 
 This example runs on just 4 nodes.  A test run might run on only 2 (the minimum required).
 
- $ mpirun -n 4 ./build/optsearch -v -c config.yml
+ $ mpirun -n 4 ./optsearch/build/optsearch -v -c gcc-8.1.0-config.yml
 
 
