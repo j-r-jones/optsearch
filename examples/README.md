@@ -1,9 +1,10 @@
 
 
-Step 1: Generate the compiler flag part of the input file for OptSearch using the helper Python 2.7 script.
+## Step 1: Generate the compiler flag part of the input file for OptSearch using the helper Python 2.7 script.
 
 To do this, you will need params.def from the relevant GCC version that you are using.  This can be downloaded from one of the GCC mirror sites.  Because I am tuning the reference BLAS in this example, it is gfortran that is of interest (the reference BLAS is written in Fortran).
 
+```
   $ gfortran --version
   GNU Fortran (GCC) 8.1.0 20180502 (Cray Inc.)
   Copyright (C) 2018 Free Software Foundation, Inc.
@@ -29,9 +30,13 @@ To do this, you will need params.def from the relevant GCC version that you are 
   2020-11-24 16:35:28,158 removing flag --param=sched-autopref-queue-depth=-1 because it results in compile error
   2020-11-24 16:35:33,894 removing flag --param=vect-max-peeling-for-alignment=-1 because it results in compile error
   $
+```
 
-Step 2. Add the other required sections of the config file.  You can use the basic examples for this.  The missing parts need to go at the top of the one that was just generated.  For example:
+## Step 2. Add the other required sections of the config file.
 
+You can use the basic examples for this.  The missing parts need to go at the top of the one that was just generated.  For example:
+
+```
  ---
  ## Main config file for optsearch
  # These are simple scripts intended to make configuration slightly easier.
@@ -45,15 +50,22 @@ Step 2. Add the other required sections of the config file.  You can use the bas
  benchmark-timeout: 3600  # How long to wait before killing the spawned benchmark process, in seconds
  benchmark-repeats: 20  # Maximum number of times to repeat the benchmark if timing results do not converge
  # The rest of this file should have been generated using the script in step 1
+```
 
-Step 3. Make sure that your paths to any helper scripts in the config file are correct, and that the scripts work.  Pay attention also to any timeouts -- you will need to know how long your target application takes to run.  In the example HPL, a test run with BLAS compiled with no optimisation was used to get a realistic worst-case time.  You could set it shorter than this.
+## Step 3. Check paths, syntax.
 
-Compilation time is a bit more difficult to guess.
+Make sure that your paths to any helper scripts in the config file are correct, and that the scripts work.  Pay attention also to any timeouts -- you will need to know how long your target application takes to run.  In the example HPL, a test run with BLAS compiled with no optimisation was used to get a realistic worst-case time.  You could set it shorter than this.
 
-Step 4. Run OptSearch using the system's job scheduler.  OptSearch uses MPI and can expand to make use of thousands of nodes at a time.  It has been tested up to 1024 nodes so far, because of the limit on what was available.  As the search space is so vast, it should be possible to fill any machine currently on the top500 list.
+Compilation time is a bit more difficult to guess, so you may need to run some test compilations to get some idea, and multiply the time by some sensible factor.
+
+## Step 4. Run OptSearch using the system's job scheduler.
+
+OptSearch uses MPI and can expand to make use of thousands of nodes at a time.  It has been tested up to 1024 nodes so far, because of the limit on what was available.  As the search space is so vast, it should be possible to fill any machine currently on the top500 list.
 
 This example runs on just 4 nodes.  A test run might run on only 2 (the minimum required).
 
+```
  $ mpirun -n 4 ./optsearch/build/optsearch -v -c gcc-8.1.0-config.yml
 
+```
 
