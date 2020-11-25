@@ -152,7 +152,7 @@ int test_taskfarm(int rank)
 
 	if (rank == MASTER) {
 
-		config->compiler = strdup("gcc");
+		config->compiler = strdup("gfortran");
 		config->compiler_version = strdup("6.3.0");
 
 		config->quit_signal = strdup("SIGUSR1");
@@ -527,7 +527,7 @@ int test_config(void)
 	assert(10.0 == config->epsilon);	/* TODO This is not how you should test equivalence with doubles */
 
 	log_trace("Checking compiler section values..");
-	assert(strncmp("gcc", config->compiler, 3) == 0);
+	assert(strncmp("gfortran", config->compiler, 3) == 0);
 	assert(strncmp("4.9.2", config->compiler_version, 5) == 0);
 
 	log_trace("Checking flags..");
