@@ -554,7 +554,7 @@ int test_config(void)
 
 	assert(strncmp(config->compiler_flags[2]->name, "inline-functions", 16) == 0);
 	assert(config->compiler_flags[2]->type == OPT_ONOFF_FLAG);
-	assert(strncmp(config->compiler_flags[2]->prefix, "-f"i, 2) == 0);
+	assert(strncmp(config->compiler_flags[2]->prefix, "-f", 2) == 0);
 	assert(strncmp(config->compiler_flags[2]->data.onoff.neg_prefix, "-fno-", 5)
 	       == 0);
 
@@ -578,7 +578,7 @@ int test_config(void)
 	assert(config->compiler_flags[4]->data.list.size == 2);
 	assert(strncmp(config->compiler_flags[4]->data.list.values[0], "off", 3)
 	       == 0);
-	assert(strcmp(config->compiler_flags[4]->data.list.values[1], "fast", 4)
+	assert(strncmp(config->compiler_flags[4]->data.list.values[1], "fast", 4)
 	       == 0);
 
 	assert(strncmp(config->compiler_flags[5]->name, "tree-parallelize-loops", 22)
