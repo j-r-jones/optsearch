@@ -28,7 +28,8 @@ endif
 INCLUDE += -I./ -I../src -I../lib/sqlite -I../lib/wellrng
 CFLAGS += -g -fno-builtin -ftrapv -fstack-check -fstack-protector-all  $(INCLUDE)
 LDFLAGS += -L./ -L../src
-LDLIBS += ../lib/wellrng/WELL512a.o -lyaml ../lib/sqlite/sqlite3.o -lgsl -lgslcblas -lreadline -lpthread -ldl -lm 
+#LDLIBS += ../lib/wellrng/WELL512a.o -lyaml ../lib/sqlite/sqlite3.o -lgsl -lgslcblas -lreadline -lpthread -ldl -lm 
+LDLIBS += ../lib/wellrng/WELL512a.o -lyaml ../lib/sqlite/sqlite3.o -lgsl -lgslcblas -ldl -lm 
 
 .SUFFIXES: .c .h .o .so
 
