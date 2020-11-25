@@ -632,7 +632,7 @@ int test_optimiser(int rank)
 	assert(10.0 == config->epsilon);	/* TODO This is not how you should test equivalence with doubles */
 
 	log_trace("Checking compiler section values..");
-	assert(strcmp("gcc", config->compiler) == 0);
+	assert(strcmp("gfortran", config->compiler) == 0);
 	assert(strcmp("4.9.2", config->compiler_version) == 0);
 
 	/*
