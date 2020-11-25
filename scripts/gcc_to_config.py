@@ -22,7 +22,7 @@ import argparse
 import re
 import ast
 import logging
-import numpy as np
+#import numpy as np
 import signal
 import threading
 import time
