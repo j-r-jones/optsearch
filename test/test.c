@@ -515,7 +515,7 @@ int test_config(void)
 
 	log_trace("Finished reading in config.  Checking top-level values..");
 
-	assert(strncmp("SIGUSR1", config->quit_signali, 7) == 0);
+	assert(strncmp("SIGUSR1", config->quit_signal, 7) == 0);
 	assert(strncmp("./clean-script.sh", config->clean_script, 17) == 0);
 	assert(strncmp("./build-script.sh", config->build_script, 17) == 0);
 	assert(strncmp("./success-script.sh", config->accuracy_test, 19) == 0);
@@ -527,7 +527,7 @@ int test_config(void)
 	assert(10.0 == config->epsilon);	/* TODO This is not how you should test equivalence with doubles */
 
 	log_trace("Checking compiler section values..");
-	assert(stnrcmp("gcc", config->compiler, 3) == 0);
+	assert(strncmp("gcc", config->compiler, 3) == 0);
 	assert(strncmp("4.9.2", config->compiler_version, 5) == 0);
 
 	log_trace("Checking flags..");
@@ -548,44 +548,44 @@ int test_config(void)
 	assert(strncmp(config->compiler_flags[1]->name, "forward-propagate", 17) ==
 	       0);
 	assert(config->compiler_flags[1]->type == OPT_ONOFF_FLAG);
-	assert(strcmp(config->compiler_flags[1]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[1]->data.onoff.neg_prefix, "-fno-")
+	assert(strncmp(config->compiler_flags[1]->prefix, "-f", 2) == 0);
+	assert(strncmp(config->compiler_flags[1]->data.onoff.neg_prefix, "-fno-", 5)
 	       == 0);
 
-	assert(strcmp(config->compiler_flags[2]->name, "inline-functions") == 0);
+	assert(strncmp(config->compiler_flags[2]->name, "inline-functions", 16) == 0);
 	assert(config->compiler_flags[2]->type == OPT_ONOFF_FLAG);
-	assert(strcmp(config->compiler_flags[2]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[2]->data.onoff.neg_prefix, "-fno-")
+	assert(strncmp(config->compiler_flags[2]->prefix, "-f"i, 2) == 0);
+	assert(strncmp(config->compiler_flags[2]->data.onoff.neg_prefix, "-fno-", 5)
 	       == 0);
 
-	assert(strcmp(config->compiler_flags[3]->name, "stack-reuse") == 0);
+	assert(strncmp(config->compiler_flags[3]->name, "stack-reuse", 11) == 0);
 	assert(config->compiler_flags[3]->type == OPT_LIST_FLAG);
-	assert(strcmp(config->compiler_flags[3]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[3]->data.list.separator, "=") == 0);
+	assert(strncmp(config->compiler_flags[3]->prefix, "-f", 2) == 0);
+	assert(strncmp(config->compiler_flags[3]->data.list.separator, "=", 1) == 0);
 	assert(config->compiler_flags[3]->data.list.size == 3);
-	assert(strcmp(config->compiler_flags[3]->data.list.values[0], "all") ==
+	assert(strncmp(config->compiler_flags[3]->data.list.values[0], "all", 3) ==
 	       0);
-	assert(strcmp
+	assert(strncmp
 	       (config->compiler_flags[3]->data.list.values[1],
-		"named_vars") == 0);
-	assert(strcmp(config->compiler_flags[3]->data.list.values[2], "none") ==
+		"named_vars", 10) == 0);
+	assert(strncmp(config->compiler_flags[3]->data.list.values[2], "none", 4) ==
 	       0);
 
-	assert(strcmp(config->compiler_flags[4]->name, "fp-contract") == 0);
+	assert(strncmp(config->compiler_flags[4]->name, "fp-contract", 11) == 0);
 	assert(config->compiler_flags[4]->type == OPT_LIST_FLAG);
-	assert(strcmp(config->compiler_flags[4]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[4]->data.list.separator, "=") == 0);
+	assert(strncmp(config->compiler_flags[4]->prefix, "-f", 2) == 0);
+	assert(strncmp(config->compiler_flags[4]->data.list.separator, "=", 1) == 0);
 	assert(config->compiler_flags[4]->data.list.size == 2);
-	assert(strcmp(config->compiler_flags[4]->data.list.values[0], "off") ==
-	       0);
-	assert(strcmp(config->compiler_flags[4]->data.list.values[1], "fast") ==
-	       0);
+	assert(strncmp(config->compiler_flags[4]->data.list.values[0], "off", 3)
+	       == 0);
+	assert(strcmp(config->compiler_flags[4]->data.list.values[1], "fast", 4)
+	       == 0);
 
-	assert(strcmp(config->compiler_flags[5]->name, "tree-parallelize-loops")
+	assert(strncmp(config->compiler_flags[5]->name, "tree-parallelize-loops", 22)
 	       == 0);
 	assert(config->compiler_flags[5]->type == OPT_RANGE_FLAG);
-	assert(strcmp(config->compiler_flags[5]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[5]->data.range.separator, "=") ==
+	assert(strncmp(config->compiler_flags[5]->prefix, "-f", 2) == 0);
+	assert(strncmp(config->compiler_flags[5]->data.range.separator, "=", 1) ==
 	       0);
 	assert(config->compiler_flags[5]->data.range.min == 0);
 	assert(config->compiler_flags[5]->data.range.max == 256);
