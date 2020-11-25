@@ -515,20 +515,20 @@ int test_config(void)
 
 	log_trace("Finished reading in config.  Checking top-level values..");
 
-	assert(strcmp("SIGUSR1", config->quit_signal) == 0);
-	assert(strcmp("./clean-script.sh", config->clean_script) == 0);
-	assert(strcmp("./build-script.sh", config->build_script) == 0);
-	assert(strcmp("./success-script.sh", config->accuracy_test) == 0);
+	assert(strncmp("SIGUSR1", config->quit_signali, 7) == 0);
+	assert(strncmp("./clean-script.sh", config->clean_script, 17) == 0);
+	assert(strncmp("./build-script.sh", config->build_script, 17) == 0);
+	assert(strncmp("./success-script.sh", config->accuracy_test, 19) == 0);
 	assert(120 == config->timeout);
 
-	assert(strcmp("./perf-script.sh", config->perf_test) == 0);
+	assert(strncmp("./perf-script.sh", config->perf_test, 16) == 0);
 	assert(240 == config->benchmark_timeout);
 	assert(6 == config->benchmark_repeats);
 	assert(10.0 == config->epsilon);	/* TODO This is not how you should test equivalence with doubles */
 
 	log_trace("Checking compiler section values..");
-	assert(strcmp("gcc", config->compiler) == 0);
-	assert(strcmp("4.9.2", config->compiler_version) == 0);
+	assert(stnrcmp("gcc", config->compiler, 3) == 0);
+	assert(strncmp("4.9.2", config->compiler_version, 5) == 0);
 
 	log_trace("Checking flags..");
 
@@ -538,14 +538,14 @@ int test_config(void)
 	}
 
 	/* First flag is -f(no-)expensive-optimizations */
-	assert(strcmp(config->compiler_flags[0]->name, "expensive-optimizations")
+	assert(strncmp(config->compiler_flags[0]->name, "expensive-optimizations", 23)
 	       == 0);
 	assert(config->compiler_flags[0]->type == OPT_ONOFF_FLAG);
-	assert(strcmp(config->compiler_flags[0]->prefix, "-f") == 0);
-	assert(strcmp(config->compiler_flags[0]->data.onoff.neg_prefix, "-fno-")
+	assert(strncmp(config->compiler_flags[0]->prefix, "-f", 2) == 0);
+	assert(strncmp(config->compiler_flags[0]->data.onoff.neg_prefix, "-fno-", 5)
 	       == 0);
 
-	assert(strcmp(config->compiler_flags[1]->name, "forward-propagate") ==
+	assert(strncmp(config->compiler_flags[1]->name, "forward-propagate", 17) ==
 	       0);
 	assert(config->compiler_flags[1]->type == OPT_ONOFF_FLAG);
 	assert(strcmp(config->compiler_flags[1]->prefix, "-f") == 0);
