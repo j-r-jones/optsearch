@@ -95,6 +95,7 @@ int batch_exec(sqlite3 * db, int num_stmts, char **statements)
 	char *errmsg = NULL;
 	char *stmt;
 
+	log_trace("Batch executing SQL statements.. ");
 	for (i = 0; i < num_stmts; i++) {
 		stmt = statements[i];
 		/* We don't care about the results */
