@@ -22,6 +22,9 @@
 /* This is a problem when it is too small */
 #define MAX_MSG_SIZE 8192
 
+/* This should be more than enough */
+#define MAX_PREFIX_SIZE 22
+
 const log_level default_log_level = LOG_LEVEL_DEBUG;
 
 static log_level current_log_level = LOG_LEVEL_INFO;
@@ -62,7 +65,7 @@ void log_initialise(FILE * out)
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 }
 
-/* TODO REFACTOR this is all terrible */
+/* TODO REFACTOR this is all still terrible.  There is too much repetition for my liking, and a bit more thought would give a more elegant solution. */
 
 void log_set_outstream(FILE * out)
 {
@@ -88,57 +91,71 @@ int log_message(const char *msg)
 	return retval;
 }
 
-int log_debug(const char *fmt, ...)
+
+int log_message_with_prefix(int msg_log_level, const char * prefix, const char *fmt, ...)
 {
 	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[DEBUG] ";
-	char *start = &buffer[strlen(prefix)];
+	int prefix_length = 0;
+	char *start = NULL;
 	int retval = 0;
-	log_level level = get_log_level();
 
-	if (level >= LOG_LEVEL_DEBUG) {
+	log_level current_log_level = get_log_level();
 
-		strcat(buffer, prefix);
+	if (current_log_level >= msg_log_level) {
+		prefix_length = strlen(prefix);
+		start = &buffer[prefix_length];
+		strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length);
 		va_list args;
 		va_start(args, fmt);
 		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
 		retval = log_message(buffer);
 		va_end(args);
 	}
+	return retval;
+}
+
+int log_debug(const char *fmt, ...)
+{
+	int retval = 0;
+	log_level current_log_level = get_log_level();
+	const char * prefix = "[DEBUG] ";
+ 
+	if (current_log_level >= LOG_LEVEL_DEBUG) {
+		va_list args;
+		va_start(args, fmt);
+		retval = log_message_with_prefix(LOG_LEVEL_DEBUG, prefix, fmt, args);
+		va_end(args);
+	}
+
 	return retval;
 }
 
 int log_warn(const char *fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[WARN] ";
-	char *start = &buffer[strlen(prefix)];;
 	int retval = 0;
-	log_level level = get_log_level();
-	if (level >= LOG_LEVEL_WARN) {
-		strcat(buffer, prefix);
+	log_level current_log_level = get_log_level();
+	const char *prefix = "[WARN] ";
+ 
+	if (current_log_level >= LOG_LEVEL_WARN) {
 		va_list args;
 		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
-		retval = log_message(buffer);
+		retval = log_message_with_prefix(LOG_LEVEL_WARN, prefix, fmt, args);
 		va_end(args);
 	}
+
 	return retval;
 }
 
 int log_error(const char *fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[ERROR] ";
-	char *start = &buffer[strlen(prefix)];;
 	int retval = 0;
-	log_level level = get_log_level();
-	if (level >= LOG_LEVEL_ERROR) {
-		strcat(buffer, prefix);
+	log_level current_log_level = get_log_level();
+	const char *prefix = "[ERROR] ";
+
+	if (current_log_level >= LOG_LEVEL_ERROR) {
 		va_list args;
 		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
-		retval = log_message(buffer);
+		retval = log_message_with_prefix(LOG_LEVEL_ERROR, prefix, fmt, args);
 		va_end(args);
 	}
 	return retval;
@@ -146,17 +163,14 @@ int log_error(const char *fmt, ...)
 
 int log_fatal(const char *fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[FATAL] ";
-	char *start = &buffer[strlen(prefix)];;
 	int retval = 0;
-	log_level level = get_log_level();
-	if (level >= LOG_LEVEL_FATAL) {
-		strcat(buffer, prefix);
+	log_level current_log_level = get_log_level();
+	const char *prefix = "[FATAL] ";
+
+	if (current_log_level >= LOG_LEVEL_FATAL) {
 		va_list args;
 		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
-		retval = log_message(buffer);
+		retval = log_message_with_prefix(LOG_LEVEL_FATAL, prefix, fmt, args);
 		va_end(args);
 	}
 	return retval;
@@ -164,17 +178,14 @@ int log_fatal(const char *fmt, ...)
 
 int log_info(const char *fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[INFO] ";
-	char *start = &buffer[strlen(prefix)];;
 	int retval = 0;
-	log_level level = get_log_level();
-	if (level >= LOG_LEVEL_INFO) {
-		strcat(buffer, prefix);
+	log_level current_log_level = get_log_level();
+	const char *prefix = "[INFO] ";
+
+	if (current_log_level >= LOG_LEVEL_INFO) {
 		va_list args;
 		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
-		retval = log_message(buffer);
+		retval = log_message_with_prefix(LOG_LEVEL_INFO, prefix, fmt, args);
 		va_end(args);
 	}
 	return retval;
@@ -182,18 +193,16 @@ int log_info(const char *fmt, ...)
 
 int log_trace(const char *fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
-	const char *prefix = "[TRACE] ";
-	char *start = &buffer[strlen(prefix)];;
 	int retval = 0;
-	log_level level = get_log_level();
-	if (level >= LOG_LEVEL_TRACE) {
-		strcat(buffer, prefix);
+	log_level current_log_level = get_log_level();
+	const char *prefix = "[TRACE] ";
+
+	if (current_log_level >= LOG_LEVEL_TRACE) {
 		va_list args;
 		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE, fmt, args);
-		retval = log_message(buffer);
+		retval = log_message_with_prefix(LOG_LEVEL_TRACE, prefix, fmt, args);
 		va_end(args);
 	}
 	return retval;
 }
+
