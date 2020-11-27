@@ -1588,12 +1588,12 @@ int opt_db_retrieve_singleton(const char *name, int *value)
 
 int opt_db_get_prng_seed(unsigned int *seed)
 {
-	return opt_db_retrieve_singleton("PRNG_SEED", seed);
+	return opt_db_retrieve_singleton("PRNG_SEED", (int *) seed);
 }
 
 int opt_db_store_prng_seed(unsigned int seed)
 {
-	return opt_db_store_singleton("PRNG_SEED", seed);
+	return opt_db_store_singleton("PRNG_SEED", (int) seed);
 }
 
 int opt_db_get_no_move_counter(int *counter)
