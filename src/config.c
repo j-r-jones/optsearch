@@ -270,7 +270,7 @@ int read_config(const char *yaml_file, opt_config_t * config)
 			break;
 
 		case YAML_SCALAR_EVENT:
-			scalar_value = event.data.scalar.value;
+			scalar_value = (char *) event.data.scalar.value;
 			log_debug("config.c: Got scalar: %s", scalar_value);
 			if (is_map(state)) {
 				if (map_key == NULL) {
@@ -823,6 +823,9 @@ void opt_destroy_flag(opt_flag_t * flag)
 {
 	int i;
 
+	/* Most of these things are const char *, so do not need to be freed */
+
+	/*
 	switch (flag->type) {
 	case OPT_RANGE_FLAG:
 		free(flag->data.range.separator);
@@ -849,6 +852,6 @@ void opt_destroy_flag(opt_flag_t * flag)
 	free(flag->prefix);
 	flag->prefix = NULL;
 	free(flag->name);
-	flag->name = NULL;
+	flag->name = NULL; */
 	free(flag);
 }
