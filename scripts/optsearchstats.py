@@ -8,6 +8,9 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+# TODO This was supposed to produce some interesting information using the 
+# results from the SQLite database and the YAML configuration file.
+# It was never finished.
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('-d', '--database', required=True, dest='db',
