@@ -107,7 +107,6 @@ unsure.
 * Testing of performance via hardware counters (eg using perf)
 
 ## Health warning
-
 This was written late at night under the influence of strong coffee by someone
 suffering from severe sleep deprivation.  Expect many bugs.  No guarantees are
 made or responsibility taken for your use of this software.
@@ -123,4 +122,7 @@ made or responsibility taken for your use of this software.
   This will be detected (and handled appropriately) in a later version, but
   time pressures mean it has to be tolerated for now.  It is up to you to
   avoid doing anything stupid.
-
+* Logging needs some serious work .. possibly replacement.  It is broken,
+  so best not to turn it up beyond 'debug' (and even that is risky).
+* If the SQLite file exists but is empty, OptSearch will spin doing nothing
+  useful until you kill it or send it the quit signal.
