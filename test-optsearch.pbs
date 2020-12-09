@@ -1,0 +1,17 @@
+#PBS -N optsearch-test
+#PBS -l nodes=2:ppn=48
+#PBS -l walltime=12:15:00
+#PBS -j oe
+#PBS -S /bin/bash
+
+## Set up the environment
+. /etc/profile.d/modules.sh
+module add gcc/8.1.0
+module add cray-mvapich2_noslurm_nogpu/2.3.4
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/lib:
+
+cd $PBS_O_WORKDIR
+
+make test
+
+echo "Done"
