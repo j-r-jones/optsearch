@@ -99,9 +99,9 @@ int log_message_with_prefix(int msg_log_level, const char * prefix, const char *
 	char *start = NULL;
 	int retval = 0;
 
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 
-	if (current_log_level >= msg_log_level) {
+	if (level >= msg_log_level) {
 		prefix_length = strlen(prefix);
 		start = &buffer[prefix_length];
 		strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
@@ -117,10 +117,10 @@ int log_message_with_prefix(int msg_log_level, const char * prefix, const char *
 int log_debug(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char * prefix = "[DEBUG] ";
  
-	if (current_log_level >= LOG_LEVEL_DEBUG) {
+	if (level >= LOG_LEVEL_DEBUG) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_DEBUG, prefix, fmt, args);
@@ -133,10 +133,10 @@ int log_debug(const char *fmt, ...)
 int log_warn(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char *prefix = "[WARN] ";
  
-	if (current_log_level >= LOG_LEVEL_WARN) {
+	if (level >= LOG_LEVEL_WARN) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_WARN, prefix, fmt, args);
@@ -149,10 +149,10 @@ int log_warn(const char *fmt, ...)
 int log_error(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char *prefix = "[ERROR] ";
 
-	if (current_log_level >= LOG_LEVEL_ERROR) {
+	if (level >= LOG_LEVEL_ERROR) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_ERROR, prefix, fmt, args);
@@ -164,10 +164,10 @@ int log_error(const char *fmt, ...)
 int log_fatal(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char *prefix = "[FATAL] ";
 
-	if (current_log_level >= LOG_LEVEL_FATAL) {
+	if (level >= LOG_LEVEL_FATAL) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_FATAL, prefix, fmt, args);
@@ -179,10 +179,10 @@ int log_fatal(const char *fmt, ...)
 int log_info(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char *prefix = "[INFO] ";
 
-	if (current_log_level >= LOG_LEVEL_INFO) {
+	if (level >= LOG_LEVEL_INFO) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_INFO, prefix, fmt, args);
@@ -194,10 +194,10 @@ int log_info(const char *fmt, ...)
 int log_trace(const char *fmt, ...)
 {
 	int retval = 0;
-	log_level current_log_level = get_log_level();
+	log_level level = get_log_level();
 	const char *prefix = "[TRACE] ";
 
-	if (current_log_level >= LOG_LEVEL_TRACE) {
+	if (level >= LOG_LEVEL_TRACE) {
 		va_list args;
 		va_start(args, fmt);
 		retval = log_message_with_prefix(LOG_LEVEL_TRACE, prefix, fmt, args);
