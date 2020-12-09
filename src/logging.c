@@ -25,7 +25,7 @@
 /* This should be more than enough */
 #define MAX_PREFIX_SIZE 22
 
-const log_level default_log_level = LOG_LEVEL_DEBUG;
+const log_level default_log_level = LOG_LEVEL_INFO;
 
 static log_level current_log_level = LOG_LEVEL_INFO;
 
