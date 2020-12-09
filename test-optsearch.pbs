@@ -1,5 +1,5 @@
 #PBS -N optsearch-test
-#PBS -l nodes=2:ppn=48
+#PBS -l nodes=4:ppn=48
 #PBS -l walltime=12:15:00
 #PBS -j oe
 #PBS -S /bin/bash
