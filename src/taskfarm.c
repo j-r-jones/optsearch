@@ -319,9 +319,9 @@ opt_task_msg_t opt_task_receive_work(opt_work_item_t * item)
 			     header[OPT_HEADER_SEQ], rc);
 			MPI_Abort(MPI_COMM_WORLD, rc);
 		}
-		log_debug
+		/*log_trace
 		    ("taskfarm.c: Received message (seq #%d): '%s' from master",
-		     header[OPT_HEADER_SEQ], item->command);
+		     header[OPT_HEADER_SEQ], item->command);*/
 	}
 	return header[OPT_HEADER_TYPE];
 }

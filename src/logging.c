@@ -91,118 +91,164 @@ int log_message(const char *msg)
 	return retval;
 }
 
-
-int log_message_with_prefix(int msg_log_level, const char * prefix, const char *fmt, ...)
+/* For messages with a custom prefix */
+int log_message_with_prefix(log_level msg_log_level, const char * prefix, char * fmt, ...)
 {
-	char buffer[MAX_MSG_SIZE] = { '\0' };
 	int prefix_length = 0;
 	char *start = NULL;
 	int retval = 0;
+	char buffer[MAX_MSG_SIZE] = { '\0' };
 
 	log_level level = get_log_level();
 
-	if (level >= msg_log_level) {
-		prefix_length = strlen(prefix);
-		start = &buffer[prefix_length];
-		strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
-		va_list args;
-		va_start(args, fmt);
-		vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
-		retval = log_message(buffer);
-		va_end(args);
-	}
+	if (level < msg_log_level)
+		return retval;
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
 	return retval;
 }
 
 int log_debug(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char * prefix = "[DEBUG] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
  
-	if (level >= LOG_LEVEL_DEBUG) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_DEBUG, prefix, fmt, args);
-		va_end(args);
-	}
+	if (level < LOG_LEVEL_DEBUG)
+		return retval;
 
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
 	return retval;
 }
 
 int log_warn(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char *prefix = "[WARN] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
  
-	if (level >= LOG_LEVEL_WARN) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_WARN, prefix, fmt, args);
-		va_end(args);
-	}
+	if (level < LOG_LEVEL_WARN)
+		return retval;
+
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
+ 
 
 	return retval;
 }
 
 int log_error(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char *prefix = "[ERROR] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
+ 
+	if (level < LOG_LEVEL_ERROR)
+		return retval;
 
-	if (level >= LOG_LEVEL_ERROR) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_ERROR, prefix, fmt, args);
-		va_end(args);
-	}
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
+
 	return retval;
 }
 
 int log_fatal(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char *prefix = "[FATAL] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
+ 
+	if (level < LOG_LEVEL_FATAL)
+		return retval;
 
-	if (level >= LOG_LEVEL_FATAL) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_FATAL, prefix, fmt, args);
-		va_end(args);
-	}
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
+
 	return retval;
 }
 
 int log_info(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char *prefix = "[INFO] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
+ 
+	if (level < LOG_LEVEL_INFO)
+		return retval;
 
-	if (level >= LOG_LEVEL_INFO) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_INFO, prefix, fmt, args);
-		va_end(args);
-	}
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
+
 	return retval;
 }
 
 int log_trace(const char *fmt, ...)
 {
-	int retval = 0;
+	int prefix_length, retval = 0;
+	char *start = NULL;
 	log_level level = get_log_level();
 	const char *prefix = "[TRACE] ";
+	char buffer[MAX_MSG_SIZE] = { '\0' };
+ 
+	if (level < LOG_LEVEL_TRACE)
+		return retval;
 
-	if (level >= LOG_LEVEL_TRACE) {
-		va_list args;
-		va_start(args, fmt);
-		retval = log_message_with_prefix(LOG_LEVEL_TRACE, prefix, fmt, args);
-		va_end(args);
-	}
+	prefix_length = strlen(prefix);
+	start = &buffer[prefix_length];
+	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	retval = log_message(buffer);
+	va_end(args);
+
 	return retval;
 }
 

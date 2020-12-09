@@ -249,7 +249,7 @@ int read_config(const char *yaml_file, opt_config_t * config)
 		if (!yaml_parser_parse(&parser, &event))
 			goto error;
 
-		log_debug("config.c: State = %c, map_key = %s", state, map_key);
+		//log_trace("config.c: State = %c, map_key = %s", state, map_key);
 		switch (event.type) {
 		case YAML_NO_EVENT:
 			break;
