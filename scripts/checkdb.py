@@ -20,7 +20,7 @@ def main(args):
     cur = conn.cursor()
 
     if args.vacuum:
-        cur.execute('.vacuum;')
+        cur.execute('vacuum;')
         conn.commit()
     else:
         # TODO there are a lot more things that it might be useful to know.
