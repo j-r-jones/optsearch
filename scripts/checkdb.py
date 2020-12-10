@@ -2,7 +2,8 @@
 
 import sqlite3
 import argparse
-import math
+import os
+from urllib.request import pathname2url
 
 # I wrote this quick and dirty script because Isambard2 does not have GNU
 # readline headers available and I did not fancy building it from source.
@@ -20,6 +21,10 @@ def main(args):
     dbfilename = args.file
     # TODO check the file exists first
 
+    if not os.path.isfile(dbfilename):
+        print("ERROR: File ", dbfilename, " does not exist.")
+        sys.exit(-1)
+
     if args.vacuum:
         try:
             conn = sqlite3.connect(dbfilename)
@@ -36,8 +41,13 @@ def main(args):
         # but it is not installed on Isambard2 at present.
 
         try:
-            dburi = 'file:%s?mode=ro' % dbfilename
+            dburi = 'file:%s?mode=ro' % pathname2url(dbfilename)
             conn = sqlite3.connect(dburi, uri=True)
+        except sqlite3.OperationalError as e:
+            print('ERROR: Could not connect to databse: ', e)
+
+
+        try:
             cur = conn.cursor()
 
             print('\nNumber of positions searched: ',)
