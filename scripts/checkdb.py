@@ -17,21 +17,29 @@ import math
 
 def main(args):
 
+    dbfilename = args.file
     # TODO check the file exists first
-    conn = sqlite3.connect(args.file)
-    cur = conn.cursor()
 
     if args.vacuum:
-        print("Vacuuming database ..")
-        cur.execute('vacuum;')
-        conn.commit()
+        try:
+            conn = sqlite3.connect(dbfilename)
+            cur = conn.cursor()
+            print("Vacuuming database ..")
+            cur.execute('vacuum;')
+            conn.commit()
+        except sqlite3.Error as e:
+            print("An error was encountered trying to vacuum the database:", e.args[0])
+
     else:
         # TODO there are a lot more things that it might be useful to know.
         # These just give a tiny hint.  Having NumPy would really help,
         # but it is not installed on Isambard2 at present.
 
-        # TODO Open the database read-only
         try:
+            dburi = 'file:%s?mode=ro' % dbfilename
+            conn = sqlite3.connect(dburi, uri=True)
+            cur = conn.cursor()
+
             print('\nNumber of positions searched: ',)
             cur.execute('select count(id) from position;')
             print(cur.fetchone())
