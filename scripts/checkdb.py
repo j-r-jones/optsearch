@@ -3,6 +3,7 @@
 import sqlite3
 import argparse
 import os
+import sys
 from urllib.request import pathname2url
 
 # I wrote this quick and dirty script because Isambard2 does not have GNU
