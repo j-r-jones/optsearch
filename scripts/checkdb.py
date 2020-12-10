@@ -16,10 +16,13 @@ import math
 # you will also need the YAML config file if you want to do that.
 
 def main(args):
+
+    # TODO check the file exists first
     conn = sqlite3.connect(args.file)
     cur = conn.cursor()
 
     if args.vacuum:
+        print("Vacuuming database ..")
         cur.execute('vacuum;')
         conn.commit()
     else:
@@ -27,20 +30,52 @@ def main(args):
         # These just give a tiny hint.  Having NumPy would really help,
         # but it is not installed on Isambard2 at present.
 
-        print('\nNumber of positions searched:')
-        cur.execute('select count(id) from position;')
-        print(cur.fetchone())
+        # TODO Open the database read-only
+        try:
+            print('\nNumber of positions searched: ',)
+            cur.execute('select count(id) from position;')
+            print(cur.fetchone())
 
-        # Did the fitnesses of the positions change much?
-        cur.execute('select fitness from position;')
-        rows = cur.fetchall()  # This gives us a list of tuples
-        #sorted_rows = sorted(rows, key=lambda fitness: fitness[0])
-        print('Fitnesses found vary between minimum: ', min(rows), ' and maximum: ', max(rows))
+            print('\nTotal number of evaluations (all visits) is: ',)
+            cur.execute('SELECT SUM(visits) FROM position;')
+            print(cur.fetchone())
 
-        print('\nBest positions found:')
-        for row in cur.execute('select * from global_best_history;'):
-            print(row)
-        print('\n')
+        
+            print("\nMaximum number of visits to any single position is: ",)
+            cur.execute("SELECT MAX(visits) FROM position;")
+            print(cur.fetchone())
+
+            print("\nAverage number of visits per position is: ",)
+            cur.execute("SELECT AVG(visits) FROM position;")
+            print(cur.fetchone())
+
+            # This one doesn't produce anything useful
+            #print("Top 10 positions by fitness (fitness,visits,id):")
+            #cur.execute("SELECT fitness,visits,id FROM position;")
+            #rows = cur.fetchall()
+            #sorted_rows = sorted(rows, key=lambda fitness: fitness[0])
+
+            print("\nTop 10 most visited positions:")
+            cur.execute("SELECT visits,fitness,id FROM position;")
+            rows = cur.fetchall()
+            sorted_rows = sorted(rows, key=lambda visits: visits[0])
+            count = 0
+            for row in sorted_rows:
+                count = count + 1
+                print(row)
+                if count == 10:
+                    break
+                
+            print('\nAll best positions found:')
+            for row in cur.execute('select * from global_best_history;'):
+                print(row)
+
+            # Did the fitnesses of the positions change much?
+            cur.execute('select fitness from position;')
+            rows = cur.fetchall()  # This gives us a list of tuples
+            print('\nFitnesses found vary between minimum: ', min(rows), ' and maximum: ', max(rows), '\n')
+        except sqlite3.Error as e:
+            print("An error was encountered trying to query the database:", e.args[0])
 
     conn.close()
 
