@@ -108,7 +108,7 @@ int log_message_with_prefix(log_level msg_log_level, const char * prefix, char *
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 	return retval;
@@ -130,7 +130,7 @@ int log_debug(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 	return retval;
@@ -152,7 +152,7 @@ int log_warn(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
  
@@ -176,7 +176,7 @@ int log_error(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 
@@ -199,7 +199,7 @@ int log_fatal(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 
@@ -222,7 +222,7 @@ int log_info(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 
@@ -245,7 +245,7 @@ int log_trace(const char *fmt, ...)
 	strncat(buffer, prefix, MAX_MSG_SIZE - prefix_length - 1);
 	va_list args;
 	va_start(args, fmt);
-	vsnprintf(start, MAX_MSG_SIZE-1, fmt, args);
+	vsnprintf(start, MAX_MSG_SIZE-prefix_length-1, fmt, args);
 	retval = log_message(buffer);
 	va_end(args);
 
