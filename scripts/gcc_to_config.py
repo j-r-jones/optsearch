@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 #
-# This was a Python 2.7 script, but it has experienced some hasty patching up
-# to make it work properly under Python 3.6+.  It has not been extensively
-# tested, so please report bugs, or better still, fix them and issue a pull
-# request.
+# This is a Python 2.7 script.
 #
 # This is a hastily put together script that borrows from OpenTuner's source
 # as well as the earlier OptSearch prototype.  It is intended to generate the
@@ -294,6 +291,8 @@ def find_valid_flag_max(flag, prefix, separator, param_min):
                 break
     return value
 
+# TODO This does not work with later GCC params.opt files, as they use a
+# different format.
 def extract_param_defaults(input_file):
     """
     Get the default, minimum, and maximum for each compiler parameter.
@@ -368,6 +367,8 @@ def preexec_setpgid_setrlimit(memory_limit):
 
 def print_params(params, cc_param_defaults, filehandle):
     for p in params:
+        if type(p) is bytes:
+            p = p.decode('utf-8')
         filehandle.write( "        - name: {0}\n".format(p))
         filehandle.write( "          type: range\n")
         filehandle.write( "          prefix: '--param '\n")
@@ -378,6 +379,8 @@ def print_params(params, cc_param_defaults, filehandle):
 def print_flags(flags, filehandle):
     # TODO This assumes all are on/off flags, which is not true
     for f in flags:
+        if type(f) is bytes:
+            f = f.decode('utf-8')
         filehandle.write( "        - name: {0}\n".format(f[2:]))
         filehandle.write( "          type: on-off\n")
         filehandle.write( "          on-prefix: '{0}'\n".format(f[:2]))
