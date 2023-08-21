@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #
-# This is a Python 2.7 script.
+# This was a Python 2.7 script, but it has experienced some hasty patching up
+# to make it work properly under Python 3.6+.  It has not been extensively
+# tested, so please report bugs, or better still, fix them and issue a pull
+# request.
 #
 # This is a hastily put together script that borrows from OpenTuner's source
 # as well as the earlier OptSearch prototype.  It is intended to generate the
