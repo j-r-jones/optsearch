@@ -74,11 +74,12 @@ def extract_working_target_flags(args):
     """
     targets, err = subprocess.Popen([args.compiler, args.target_input],
                                        stdout=subprocess.PIPE).communicate()
-    found_compiler_flags = re.findall(r'^  (-m[a-z0-9-]+) ', targets,
+    found_compiler_flags = re.findall(b'^  (-m[a-z0-9-]+) ', targets,
                                 re.MULTILINE)
     log.info('Determining which of %s possible target flags work',
              len(found_compiler_flags))
-    found_compiler_flags = filter(check_if_flag_works, found_compiler_flags)
+    found_compiler_flags = list(filter(check_if_flag_works,
+        found_compiler_flags))
     log.info("Returning %s target flags", len(found_compiler_flags));
     return found_compiler_flags
 
@@ -89,11 +90,14 @@ def extract_working_opt_flags(args):
     """
     optimizers, err = subprocess.Popen([args.compiler, args.opt_input],
                                        stdout=subprocess.PIPE).communicate()
-    found_compiler_flags = re.findall(r'^  (-f[a-z0-9-]+) ', optimizers,
+    found_compiler_flags = re.findall(b'^  (-f[a-z0-9-]+) ', optimizers,
                                 re.MULTILINE)
     log.info('Determining which of %s possible optimisation flags work',
              len(found_compiler_flags))
-    found_compiler_flags = filter(check_if_flag_works, found_compiler_flags)
+    # Let's assume that this is not an infinite iterator, as that would break
+    # everything anyway.
+    found_compiler_flags = list(filter(check_if_flag_works,
+        found_compiler_flags))
     log.info("Returning %s optimisation flags", len(found_compiler_flags));
     return found_compiler_flags
 
@@ -104,7 +108,7 @@ def extract_working_flags(args):
     return (optflags + targflags)
 
 def extract_compiler_version(args):
-    m = re.search(r'([0-9]+)[.]([0-9]+)[.]([0-9]+)', subprocess.check_output([
+    m = re.search(b'([0-9]+)[.]([0-9]+)[.]([0-9]+)', subprocess.check_output([
         args.compiler, '--version']))
     if m:
       compiler_version = tuple(map(int, m.group(1, 2, 3)))
@@ -132,7 +136,8 @@ def call_program(args, cmd, limit=None, memory_limit=None, **kwargs):
     the_io_thread_pool_init(args.parallelism)
     if limit is float('inf'):
       limit = None
-    if type(cmd) in (str, unicode):
+    #if type(cmd) in (str, unicode):
+    if type(cmd) is (str):
       kwargs['shell'] = True
     killed = False
     t0 = time.time()
@@ -208,11 +213,13 @@ def goodwait(p):
     try:
       rv = p.wait()
       return rv
-    except OSError, e:
+    except OSError as e:
       if e.errno != errno.EINTR:
         raise
 
 def check_if_flag_works(flag, try_inverted=True):
+    if type(flag) is bytes:
+        flag = flag.decode("utf-8")
     log.debug("Flag is: {0}".format(flag))
     cmd = "{0} {1} {2}".format(args.compiler, flag, args.test)
     log.debug("Running command: {0}".format(cmd))
@@ -220,10 +227,10 @@ def check_if_flag_works(flag, try_inverted=True):
     if compile_result['returncode'] != 0:
       log.warning("removing flag %s because it results in compile error", flag)
       return False
-    if 'warning: this target' in compile_result['stderr']:
+    if 'warning: this target'.encode() in compile_result['stderr']:
       log.warning("removing flag %s because not supported by target", flag)
       return False
-    if 'has been renamed' in compile_result['stderr']:
+    if 'has been renamed'.encode() in compile_result['stderr']:
       log.warning("removing flag %s because renamed", flag)
       return False
     if try_inverted and flag[:2] == '-f':
@@ -243,7 +250,7 @@ def invert_compiler_flag(flag):
 def parse_params(args, cc_param_defaults):
     params, err = subprocess.Popen(
         [args.compiler, '--help=params'], stdout=subprocess.PIPE).communicate()
-    all_params = re.findall(r'^  ([a-z0-9-]+) ', params, re.MULTILINE)
+    all_params = re.findall(b'^  ([a-z0-9-]+) ', params, re.MULTILINE)
 
     all_params = sorted(set(all_params) &
             set(cc_param_defaults.keys()))
@@ -252,6 +259,7 @@ def parse_params(args, cc_param_defaults):
            len(all_params))
     working_params = []
     for param in all_params:
+        param = param.strip().decode()
         if check_if_flag_works('--param={0}={1}'.format(
                 param, cc_param_defaults[param]['default'])):
           working_params.append(param)
@@ -264,7 +272,7 @@ def find_valid_flag_max(flag, prefix, separator, param_min):
     param_max = 2147483646 # This is one less than INT_MAX
 
     if not check_if_flag_works('{0}{1}{2}{3}'.format(prefix, flag, separator, param_min)):
-        print "ERROR: Flag {0} has no valid value".format(flag)
+        print("ERROR: Flag {0} has no valid value".format(flag))
         return param_min
 
     value = param_max
@@ -277,7 +285,7 @@ def find_valid_flag_max(flag, prefix, separator, param_min):
         else:
             value = abs(value - param_min)/2 + param_min
             if value > param_max or value < param_min:
-                print "ERROR: Flag {0} has no valid max value".format(flag)
+                print("ERROR: Flag {0} has no valid max value".format(flag))
                 value = param_min
                 found = True
                 break
