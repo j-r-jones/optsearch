@@ -297,13 +297,11 @@ def extract_param_defaults(input_file):
     """
     Get the default, minimum, and maximum for each compiler parameter.
     Requires source code for compiler to be in your home directory.
-    This example ships with a cached version so it does not require source.
     """
-    # TODO
-    # default values of params need to be extracted from source code,
+    # Default values of params need to be extracted from source code,
     # since they are not in --help. Later we'll get them from a config file,
     # as other compilers are even less helpful than GCC and are closed
-    # source.
+    # source in addition to not printing useful lists of flags.
     param_defaults = dict()
     # TODO Parse the params.def file
     pattern = 'params\.def$'
@@ -311,7 +309,28 @@ def extract_param_defaults(input_file):
     s = re.search(pat, input_file)
     # TODO A more intelligent check would be good
     if not s:
-        log.error("This does not look like a params.def file from the GCC source")
+        pattern = 'params\.opt$'
+        pat = re.compile(pattern)
+        s = re.search(pat, input_file)
+        if not s:
+            log.error("This does not look like a params.def file from the GCC source")
+            return param_defaults
+        log.info("Newer version of GCC: params.opt file supplied")
+        log.error("Not yet implemented!")
+        return param_defaults
+
+        # TODO XXX Update to parse this file.  New regexes are required as
+        # the format is different from the old params.def
+        params_def = open(os.path.expanduser(input_file)).read()
+        for m in re.finditer(r'-param=', params_def):
+            param_def_str = (m.group(1)
+                             .replace('GGC_MIN_EXPAND_DEFAULT', '30')
+                             .replace('GGC_MIN_HEAPSIZE_DEFAULT', '4096')
+                             .replace('50 * 1024 * 1024', '52428800')
+                             .replace('128 * 1024 * 1024', '134217728')
+                             .replace('INT_MAX', '2147483646'))
+            # XXX Also need to replace INT_MAX
+            # With 32-bit ints, INT_MAX is 2147483647
     else:
         params_def = open(os.path.expanduser(input_file)).read()
         for m in re.finditer(r'DEFPARAM *\((([^")]|"[^"]*")*)\)', params_def):
@@ -321,8 +340,7 @@ def extract_param_defaults(input_file):
                              .replace('50 * 1024 * 1024', '52428800')
                              .replace('128 * 1024 * 1024', '134217728')
                              .replace('INT_MAX', '2147483646'))
-            # XXX Also need to replace INT_MAX
-            # With 32-bit ints, INT_MAX is 2147483647
+
             param_min = 0
             param_max = 0
             default = 0
