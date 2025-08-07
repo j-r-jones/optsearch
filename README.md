@@ -102,12 +102,17 @@ At present it is assumed that the flags and params YAML files will be included
 or found within the main config file.  Please look at the examples if you are
 unsure.
 
-Note that, although checkpoints are taken regularly, optsearch also listens
-for a user-customisable signal (default SIGUSR1) to trigger a checkpoint.
-This allows for the use of ```#SBATCH --signal``` so that a checkpoint is
-immediately triggered before the walltime is reached.
+## Features
 
-Data is stored in SQLite, tuned to be as resilient as possible.
+* Particle Swarm Optimisation (PSO) based search
+* Configurable via YAML files
+* Checkpoints at regular intervals
+* Checkpoints on receiving a signal from the scheduler or workload manager,
+  prior to walltime expiry (eg ```sbatch --signal ..```).
+* Able to be reconfigured (ie change the number of nodes, cores being used) if
+  stopped and re-started from a checkpoint.
+* Uses SQLite with WAL enabled and other tunings to avoid data loss on
+  unstable systems.
 
 ## Wishlist
 * autoconf/automake
