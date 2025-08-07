@@ -102,6 +102,13 @@ At present it is assumed that the flags and params YAML files will be included
 or found within the main config file.  Please look at the examples if you are
 unsure.
 
+Note that, although checkpoints are taken regularly, optsearch also listens
+for a user-customisable signal (default SIGUSR1) to trigger a checkpoint.
+This allows for the use of ```#SBATCH --signal``` so that a checkpoint is
+immediately triggered before the walltime is reached.
+
+Data is stored in SQLite, tuned to be as resilient as possible.
+
 ## Wishlist
 * autoconf/automake
 * Testing of performance via hardware counters (eg using perf)
